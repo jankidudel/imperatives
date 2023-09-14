@@ -1,6 +1,6 @@
 ## Task 1 notes:
 
-Please see the db_structure.pdf ([link](../blob/main/db_structure.pdf)) as a reference for my implementation of what can be a valid mapping storing mechanism.
+Please see the db_structure.pdf ([link](https://github.com/jankidudel/imperatives/blob/main/db_structure.pdf)) as a reference for my implementation of what can be a valid mapping storing mechanism.
 That DB structure is translated in dataservice.ts, which I kept as a code collection for simplicity and time saving of testing this task.
    
 
