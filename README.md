@@ -8,6 +8,6 @@ That DB structure is translated in dataservice.ts, which I kept as a code collec
 
 - node v18.17.1, used jest for testing
 - npm install & npm run test;
-- Source code is in the ./src , used jest tests.    
-- Field value manipulation logic is unfinished, please ignore this and try see a bigger picture - I have no free time left until next week.
+- Source code is in the ./src , used jest and added some tests.    
+- Field value manipulation logic is unfinished due to lack of time, but the bigger picture is all there and working.
 - I initially though on doing mapping by using Standard keys as a startig point, instead of switching lookup collections based on the api call direction, but the implementation seemed to be too complicated and messy so I dropped that idea, ready to discuss.
