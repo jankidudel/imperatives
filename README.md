@@ -11,5 +11,3 @@ That DB structure is translated in dataservice.ts, which I kept as a code collec
 - Source code is in the ./src , used jest tests.    
 - Field value manipulation logic is unfinished, please ignore this and try see a bigger picture - I have no free time left until next week.
 - I initially though on doing mapping by using Standard keys as a startig point, instead of switching lookup collections based on the api call direction, but the implementation seemed to be too complicated and messy so I dropped that idea, ready to discuss.
-
-# imperatives
