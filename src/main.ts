@@ -38,7 +38,7 @@ export async function mapCharacteristics (
         ? allStandardFields
         : allSupplierFields
 
-    const BackwardlookupCollection: FieldsMap =
+    const reverseLookupCollection: FieldsMap =
       apiDirection === ApiDirection.Forward
         ? allSupplierFields
         : allStandardFields
@@ -73,7 +73,7 @@ export async function mapCharacteristics (
 
     for (let k = 0; k < vendorFieldIds.length; k++) {
       // look for replacement mapping
-      const replacement = BackwardlookupCollection.get(vendorFieldIds[k])
+      const replacement = reverseLookupCollection.get(vendorFieldIds[k])
       if (replacement !== undefined) {
         replacements.push(replacement)
       }
