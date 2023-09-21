@@ -27,57 +27,45 @@ export async function mapCharacteristics (
 
   const output: Characteristic[] = []
   for (let i = 0; i < characteristics.length; i++) {
-    const inputElem = characteristics[i]
-    const replacements: Characteristic[] = []
-
-    let lookupElementId: number | undefined
-
     // set lookup & Backward lookup collections base on an API direction
-    const lookupCollection: FieldsMap =
+    const [lookupCollection, reverseLookupCollection] =
       apiDirection === ApiDirection.Forward
-        ? allStandardFields
-        : allSupplierFields
+        ? [allStandardFields, allSupplierFields]
+        : [allSupplierFields, allStandardFields]
 
-    const reverseLookupCollection: FieldsMap =
-      apiDirection === ApiDirection.Forward
-        ? allSupplierFields
-        : allStandardFields
-
-    for (const [key, value] of lookupCollection.entries()) {
-      if (value.name === inputElem.name) {
-        lookupElementId = key
-        break
+    const [lookupElementId] = [...lookupCollection.entries()].find(
+      ([key, value]) => {
+        return value.name === characteristics[i].name
       }
-    }
-
+    ) as [number, Characteristic]
     if (lookupElementId === undefined) {
       continue
     }
-    let vendorFieldIds: number[] = []
 
-    vendorFieldIds = allSupplierMapping.reduce((acc: number[], currentVal) => {
-      // Use forward or Backward lookup based on the request direction
-      if (
-        apiDirection === ApiDirection.Forward &&
-        lookupElementId === currentVal.fieldId
-      ) {
-        acc.push(currentVal.supplierFieldId)
-      } else if (
-        apiDirection === ApiDirection.Backward &&
-        lookupElementId === currentVal.supplierFieldId
-      ) {
-        acc.push(currentVal.fieldId)
-      }
-      return acc
-    }, [])
+    const vendorFieldIds = allSupplierMapping.reduce(
+      (acc: number[], currentVal) => {
+        // Use forward or Backward lookup based on the request direction
+        if (
+          apiDirection === ApiDirection.Forward &&
+          lookupElementId === currentVal.fieldId
+        ) {
+          return [...acc, currentVal.supplierFieldId]
+        } else if (
+          apiDirection === ApiDirection.Backward &&
+          lookupElementId === currentVal.supplierFieldId
+        ) {
+          return [...acc, currentVal.fieldId]
+        }
+        return acc
+      },
+      []
+    )
 
-    for (let k = 0; k < vendorFieldIds.length; k++) {
-      // look for replacement mapping
-      const replacement = reverseLookupCollection.get(vendorFieldIds[k])
-      if (replacement !== undefined) {
-        replacements.push(replacement)
-      }
-    }
+    const replacements: Characteristic[] = vendorFieldIds
+      .map((elem, index) => reverseLookupCollection.get(vendorFieldIds[index]))
+      .filter((elem): elem is Characteristic => {
+        return !!(elem !== undefined)
+      })
 
     if (replacements.length > 0) {
       // replace with the mapped elements, optional field value mechanism is missing - needs to be improved
